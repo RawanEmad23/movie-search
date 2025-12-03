@@ -13,7 +13,7 @@ const FavoritesPage: React.FC = () => {
     setFavIds(storedFavs);
   }, []);
 
-  // Function to remove favorite
+
   const removeFavorite = (id: string) => {
     const updatedFavs = favIds.filter(favId => favId !== id);
     localStorage.setItem("favorites", JSON.stringify(updatedFavs));
