@@ -38,12 +38,10 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
 
 
 const searchMovies = useCallback(
-
   async (query: string, page: number = 1, type?: 'All' | 'Movie' | 'Series') => {
     setLoading(true);
     setError("");
     try {
-    
       const typeParam = type && type !== 'All' ? `&type=${type.toLowerCase()}` : '';
       const res = await fetch(
         `https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(query)}&page=${page}${typeParam}`
@@ -62,17 +60,19 @@ const searchMovies = useCallback(
       setMovies([]);
       setTotalResults(0);
       setError("Failed to fetch movies");
+      
       console.error(err);
     } finally {
       setLoading(false);
     }
   },
-  []
+  [setLoading, setError, setMovies, setTotalResults, API_KEY] 
 );
 
 
 
-  const fetchMovieById = async (id: string): Promise<MovieDetails> => {
+const fetchMovieById = useCallback(
+  async (id: string): Promise<MovieDetails> => {
     if (!id) throw new Error("No movie ID provided");
 
     const res = await fetch(
@@ -85,10 +85,14 @@ const searchMovies = useCallback(
     } else {
       throw new Error(data.Error || "Failed to fetch movie details");
     }
-  };
+  },
 
-  useEffect(() => { searchMovies("Batman"); }, [searchMovies]);
+  [API_KEY] 
+);
 
+useEffect(() => { 
+    searchMovies("Batman"); 
+  }, [])
   return (
     <MovieContext.Provider
       value={{ movies, searchMovies, fetchMovieById, loading, error, totalResults }}
