@@ -1,22 +1,25 @@
+
+
 import React, { useEffect, useState, useContext } from "react";
 import MovieCard from "../Components/MovieCard";
-import type { MovieCardProps } from "../types/movieTypes";
+import type { MovieType } from "../types/movieTypes";
 import { MovieContext } from "../MovieContext";
 
 const FavoritesPage: React.FC = () => {
   const [favIds, setFavIds] = useState<string[]>([]);
-const context = useContext(MovieContext)!;
-const allMovies = context.movies;
+  const context = useContext(MovieContext)!;
+  const allMovies = context.movies;
 
   
-useEffect(() => {
-  const storedFavs = JSON.parse(localStorage.getItem("favorites") || "[]") as string[];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  setFavIds(storedFavs);
-}, []);
+  useEffect(() => {
+    const storedFavs = JSON.parse(localStorage.getItem("favorites") || "[]") as string[];
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    setFavIds(storedFavs);
+  }, []);
 
-
-  const favMovies: MovieCardProps["movie"][] = allMovies.filter(m => favIds.includes(m.imdbID));
+  const favMovies: MovieType[] = favIds
+    .map(id => allMovies.find(movie => movie.imdbID === id))
+    .filter((movie): movie is MovieType => movie !== undefined);
 
   if (favMovies.length === 0) {
     return <p className="text-center mt-10 text-gray-400">You have no favorite movies yet.</p>;
