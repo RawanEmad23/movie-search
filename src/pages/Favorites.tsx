@@ -4,10 +4,9 @@ import { MovieContext } from "../MovieContext";
 
 const FavoritesPage: React.FC = () => {
   const [favIds, setFavIds] = useState<string[]>([]);
-  const context = useContext(MovieContext);
-  const allMovies = context?.movies || [];
+const context = useContext(MovieContext)!;
+const allMovies = context.movies;
 
-  // جلب الـ ids من localStorage
   
 useEffect(() => {
   const storedFavs = JSON.parse(localStorage.getItem("favorites") || "[]") as string[];
@@ -16,7 +15,6 @@ useEffect(() => {
 }, []);
 
 
-  // تصفية الأفلام حسب الـ favorites
   const favMovies: MovieType[] = allMovies.filter(m => favIds.includes(m.imdbID));
 
   if (favMovies.length === 0) {

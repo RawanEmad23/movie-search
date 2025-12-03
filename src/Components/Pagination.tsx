@@ -1,12 +1,9 @@
 import React from "react";
 
-interface Props {
-  page: number;
-  totalPages: number;
-  onPageChange: (newPage: number) => void;
-}
+import type { PaginationProps } from "../types/movieTypes";
 
-const Pagination: React.FC<Props> = ({ page, totalPages, onPageChange }) => {
+
+const Pagination: React.FC<PaginationProps> = ({ page, totalPages, onPageChange }) => {
   return (
     <div className="flex justify-center items-center gap-2 mt-6">
       <button

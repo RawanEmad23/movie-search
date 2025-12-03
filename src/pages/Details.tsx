@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { MovieContext,type MovieDetails } from "../MovieContext";
+import { MovieContext } from "../MovieContext";
+import type { MovieDetails } from "../types/movieTypes";
+import { Loader } from "../Components/Loader";
+
 
 export default function Details() {
-  const context = useContext(MovieContext);
-  if (!context) throw new Error("MovieContext not provided");
-
+  const context = useContext(MovieContext)!;
   const { fetchMovieById } = context;
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -31,12 +32,7 @@ export default function Details() {
     getMovie();
   }, [id, fetchMovieById]);
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white">
-        <div className="loader border-4 border-t-4 border-gray-300 w-12 h-12 rounded-full animate-spin"></div>
-      </div>
-    );
+  if (loading) return <Loader />;
 
   if (!movie)
     return (
@@ -48,7 +44,6 @@ export default function Details() {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 flex justify-center">
       <div className="max-w-5xl w-full bg-gray-800 rounded-2xl shadow-xl p-6 flex flex-col md:flex-row gap-8">
-        
         <div className="w-full md:w-1/3">
           <img
             src={movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"}
@@ -65,7 +60,6 @@ export default function Details() {
             </p>
             <p className="text-gray-400">{movie.Plot}</p>
 
-           
             <div className="flex items-center gap-2 mt-3">
               <span className="text-yellow-400 text-xl">★</span>
               <span className="text-lg font-semibold">{movie.imdbRating}</span>
