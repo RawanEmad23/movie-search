@@ -1,14 +1,8 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { FiHeart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import type { MovieType } from "../types/movieTypes";
+import type { MovieCardProps } from "../types/movieTypes";
 
-type MovieCardProps = {
-  movie: MovieType;
-};
 
 const MovieCard = ({ movie }: MovieCardProps) => {
   const navigate = useNavigate();
@@ -16,23 +10,16 @@ const MovieCard = ({ movie }: MovieCardProps) => {
 
   useEffect(() => {
     const storedFavs: string[] = JSON.parse(localStorage.getItem("favorites") || "[]");
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     setIsFav(storedFavs.includes(movie.imdbID));
   }, [movie.imdbID]);
 
-  // تحديث المفضلة
   const toggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
     const storedFavs: string[] = JSON.parse(localStorage.getItem("favorites") || "[]");
-    let updatedFavs: string[];
-
-    if (isFav) {
-      updatedFavs = storedFavs.filter(id => id !== movie.imdbID);
-    } else {
-    
-      updatedFavs = Array.from(new Set([...storedFavs, movie.imdbID]));
-    }
-
+    const updatedFavs = isFav
+      ? storedFavs.filter(id => id !== movie.imdbID)
+      : [...storedFavs, movie.imdbID];
     localStorage.setItem("favorites", JSON.stringify(updatedFavs));
     setIsFav(!isFav);
   };
@@ -48,7 +35,6 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         className="w-full h-60 object-cover"
       />
 
- 
       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center text-center p-4 pointer-events-none">
         <h2 className="text-lg font-bold">{movie.Title}</h2>
         <p>{movie.Year} - {movie.Type}</p>
