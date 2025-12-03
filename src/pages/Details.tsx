@@ -4,7 +4,9 @@ import { MovieContext } from "../MovieContext";
 import type { MovieDetails } from "../types/movieTypes";
 
 export default function Details() {
-const context = useContext(MovieContext)!;
+  const context = useContext(MovieContext);
+  if (!context) throw new Error("MovieContext not provided");
+
   const { fetchMovieById } = context;
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
