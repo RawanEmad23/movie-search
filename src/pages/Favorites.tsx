@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import MovieCard, {type MovieType } from "../Components/MovieCard";
+import MovieCard from "../Components/MovieCard";
+import type { MovieCardProps } from "../types/movieTypes";
 import { MovieContext } from "../MovieContext";
 
 const FavoritesPage: React.FC = () => {
@@ -15,7 +16,7 @@ useEffect(() => {
 }, []);
 
 
-  const favMovies: MovieType[] = allMovies.filter(m => favIds.includes(m.imdbID));
+  const favMovies: MovieCardProps["movie"][] = allMovies.filter(m => favIds.includes(m.imdbID));
 
   if (favMovies.length === 0) {
     return <p className="text-center mt-10 text-gray-400">You have no favorite movies yet.</p>;

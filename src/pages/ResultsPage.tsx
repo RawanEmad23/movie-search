@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MovieContext } from "../MovieContext"; 
-import MovieCard, { type MovieType } from "../Components/MovieCard";
+import MovieCard from "../Components/MovieCard";
 import Pagination from "../Components/Pagination";
 import { Loader, ErrorMessage } from "../Components/Loader";
 import { FiArrowLeft } from "react-icons/fi";
@@ -18,16 +18,27 @@ export default function Results() {
   const [filterType, setFilterType] = useState<'All' | 'Movie' | 'Series'>('All');
   const [sortType, setSortType] = useState<'year' | 'alpha' | ''>('');
 
+  const context = useContext(MovieContext)!;
+  const { movies, searchMovies, loading, error, totalResults, setError, setMovies, setTotalResults } = context;
 
-const context = useContext(MovieContext)!
-
-  const { movies, searchMovies, loading, error, totalResults } = context;
   const totalPages = Math.ceil(totalResults / 10);
 
  
   useEffect(() => {
-    if (queryParam) searchMovies(queryParam, page, filterType);
-  }, [queryParam, page, filterType, searchMovies]);
+    if (!queryParam) return;
+
+
+    
+if (queryParam.length < 3) {
+  setMovies([]);
+  setTotalResults(0);
+  setError("Please enter at least 3 characters to search");
+  return;
+}
+
+console.log(movies);
+    searchMovies(queryParam, page, filterType);
+  }, [queryParam, page, filterType, searchMovies, setError, setMovies, setTotalResults]);
 
   const filteredMovies = movies
     .filter(movie => filterType === 'All' ? true : movie.Type.toLowerCase() === filterType.toLowerCase())
@@ -65,7 +76,7 @@ const context = useContext(MovieContext)!
       {!loading && filteredMovies.length > 0 && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-            {filteredMovies.map((movie: MovieType, index) => <MovieCard key={movie.imdbID + index} movie={movie} />)}
+            {filteredMovies.map((movie, index) => <MovieCard key={movie.imdbID + index} movie={movie} />)}
           </div>
 
           {totalPages > 1 && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}

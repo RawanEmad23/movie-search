@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useState, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { Movie, MovieDetails, MovieContextProps } from "./types/movieTypes";
 
@@ -61,13 +61,17 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
     [API_KEY]
   );
 
-  useEffect(() => {
-    searchMovies("Batman");
-  }, [searchMovies]);
-
   return (
-    <MovieContext.Provider value={{ movies, searchMovies, fetchMovieById, loading, error, totalResults }}>
+    <MovieContext.Provider value={{ 
+      movies, setMovies,
+      searchMovies,
+      fetchMovieById,
+      loading,
+      error, setError,
+      totalResults, setTotalResults
+    }}>
       {children}
     </MovieContext.Provider>
   );
 };
+

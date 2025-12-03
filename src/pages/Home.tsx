@@ -6,10 +6,14 @@ export default function Home() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  const handleSearch = (q: string) => {
-    if (!q.trim()) return;
-    navigate(`/search?query=${encodeURIComponent(q.trim())}`);
-  };
+const handleSearch = (q: string) => {
+  if (!q.trim()) return;
+  if (q.trim().length < 3) {
+    alert("Please enter at least 3 characters for search");
+    return;
+  }
+  navigate(`/search?query=${encodeURIComponent(q.trim())}`);
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
@@ -29,7 +33,7 @@ export default function Home() {
           onSearch={handleSearch} 
         />
 
-        {/* زرار المفضلة */}
+        
         <button
           onClick={() => navigate("/favorites")}
           className="mt-6 px-6 py-3 bg-red-600 text-white font-semibold rounded-full hover:bg-red-700 transition-colors shadow-lg"
